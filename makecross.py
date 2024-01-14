@@ -29,11 +29,36 @@ def startY(tree):
             
     return -1*min
 
+def toStr(l):
+    s = ""
+    for i in l:
+        s += i
+    return s
 
+def scanH(grid):
+    for i in grid:
+        l = toStr(i).split(" ")
+        for j in l:
+            if len(j) > 1 and not j in words:
+                return False
+    return True
+
+def scanV(grid):
+    s = ""
+
+    for i in range(len(grid)):
+        for j in range(len(grid)):
+            s += grid[j][i]
+        s += " "
+
+    l = s.split(" ")
+
+    for i in l:
+        if len(i) > 1 and not i in words:
+            return False
+    return True
 
 def plot(tree, d):
-    if(len(tree) == 0):
-        return
     
     grid = [[" " for _ in range(d)] for _ in range(d)]
 
@@ -85,6 +110,8 @@ def plot(tree, d):
                 grid[i][j] = k
                 j += 1
         
+    if not scanH(grid) or not scanV(grid):
+        return False
 
     return grid
 
@@ -98,7 +125,7 @@ def isSpanTree(tree):
         found = False
         for j in tree:
             if j[0] == i or j[1] == i:
-                found == True
+                found = True
                 break
         if found == False:
             return False
@@ -126,7 +153,7 @@ class Puzzle:
         for i in range(50):
             st = self.dfs_spanning_tree(start_word,i)
             if not st == False:
-                return st
+                return (st,i)
 
     def dfs_spanning_tree(self, start_word,dim):
         visited = set()
@@ -169,12 +196,5 @@ def print_grid(grid):
 
 p = Puzzle()
 findPairs(p,words)
-print_grid(plot(p.smallestST("charm"),6))
-
-
-tree = (("charm","adorn",(2,0)),("charm","metal",(4,0)),("adorn","worth",(2,1)),("adorn","angle",(4,1)))
-
-
-
-
-
+x = p.smallestST("charm")
+print_grid(plot(x[0],x[1]))
