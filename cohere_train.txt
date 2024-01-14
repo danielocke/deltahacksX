@@ -1,0 +1,121 @@
+Term: Monarchy
+Definition: Rule by a monarch.
+
+Term: Feudalism
+Definition: Land-for-service system.
+
+Term: Reformation
+Definition: Church reform movement.
+
+Enlightenment
+Definition: Reason and individual rights.
+
+Term: Industrial Revolution
+Definition: Shift to industry.
+
+Term: Imperialism
+Definition: Expansion through acquisition.
+
+Term: Renaissance
+Definition: Revival of art.
+
+Term: Manifest Destiny
+Definition: U.S. territorial expansion.
+
+Term: Cold War
+Definition: U.S.-Soviet geopolitical tension.
+
+Term: Suffrage
+Definition: Right to vote.
+
+Term: Fascism
+Definition: Authoritarian nationalism.
+
+Term: Civil Rights Movement
+Definition: Equality and justice.
+
+Term: Marxism
+Definition: Classless, communist society.
+
+Term: Nationalism
+Definition: Strong national identification.
+
+Term: Great Depression
+Definition: Severe economic downturn.
+
+Term: Holocaust
+Definition: Nazi genocide.
+
+Term: Magna Carta
+Definition: Limits on monarchy.
+
+Term: Napoleonic Wars
+Definition: Napoleon's military campaigns.
+
+Term: Jim Crow Laws
+Definition: Racial segregation laws.
+
+Term: Pax Romana
+Definition: Roman peace and stability.
+
+Term: Apartheid
+Definition: Racial segregation policy.
+
+Term: Tsar/Czar:
+Definition: Russian monarch title.
+
+Term: Habeas Corpus
+Definition: Legal protection against unlawful detention.
+
+Term: Glorious Revolution:
+Definition: English constitutional change.
+
+Term: Diaspora
+Definition: Scattered population outside homeland.
+
+Term: D-Day
+Definition: Allied invasion of Normandy.
+
+Term: Triangle Trade
+Definition: Colonial trade route.
+
+Term: Suffragette
+Definition: Woman advocating suffrage.
+
+Term: Red Scare
+Definition: Fear of communism.
+
+Term: Martial Law
+Definition: Military control of government.
+
+Term: Zionism
+Definition: Jewish homeland advocacy.
+
+Term: Gilded Age
+Definition: Late 19th-century prosperity.
+
+Term: Treaty of Versailles
+Definition: Post-WWI peace treaty.
+
+Term: Reconquista
+Definition: Christian reclaiming of Iberia.
+
+Term: Roaring Twenties
+Definition: 1920s economic boom.
+
+Term: Intifada
+Definition: Palestinian uprisings.
+
+Term: War of 1812
+Definition: U.S.-British conflict.
+
+Term: Prohibition
+Definition: Alcohol ban era.
+
+Term: Tiananmen Square
+Definition: 1989 student protests.
+
+Term: Redemption Era
+Definition: Southern post-Reconstruction period.
+
+Term: 

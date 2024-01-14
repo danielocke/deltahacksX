@@ -1,4 +1,17 @@
-words = ['charm','adorn','metal','worth','angle']
+import subprocess
+import cohere
+
+f = open("input.txt", "r")
+words = f.readlines()
+f.close()
+
+for i in range(len(words)):
+    words[i] = words[i].replace(" ","")
+    words[i] = words[i].replace("\n","")
+    words[i] = words[i].lower()
+
+
+co = cohere.Client("j8Q3uuHv8d59FNURAMP3szgk8Az9x3diHgGL6vc0")
 
 def startX(tree):
     h = 1
@@ -59,7 +72,7 @@ def scanV(grid):
     return True
 
 def plot(tree, d):
-    
+
     grid = [[" " for _ in range(d)] for _ in range(d)]
 
     i = startY(tree)
@@ -68,7 +81,7 @@ def plot(tree, d):
     dir = -1 # 1 for vertical, -1 for horizontal
     loc = {tree[0][0]:(i,j,dir)}
 
-    if j + len(tree[0][0]) > d:
+    if j + len(tree[0][0]) >= d or j < 0:
         return False
 
     for k in tree[0][0]:
@@ -86,7 +99,7 @@ def plot(tree, d):
             
             loc[w[1]] = (i,j,dir)
 
-            if i + len(tree[0][0]) > d:
+            if i + len(tree[0][0]) >= d or i < 0:
                 return False
 
             for k in w[1]:
@@ -101,7 +114,7 @@ def plot(tree, d):
 
             loc[w[1]] = (i,j,dir)
 
-            if j + len(tree[0][0]) > d:
+            if j + len(tree[0][0]) >= d or j < 0:
                 return False
 
             for k in w[1]:
@@ -113,7 +126,16 @@ def plot(tree, d):
     if not scanH(grid) or not scanV(grid):
         return False
 
-    return grid
+    locS = loc.items()
+    locS = sorted(locS,key = lambda t : t[1][0]*d + t[1][1])
+    for i in range(len(locS)):
+        grid[locS[i][1][0]][locS[i][1][1]] ="[" + str(i + 1) + "]" + grid[locS[i][1][0]][locS[i][1][1]]
+    namesS = []
+    for i in locS:
+        namesS.append(i[0])
+
+
+    return grid,namesS
 
 def testAdd(tree,new,d):
     if plot(tree + [new],d) == False:
@@ -150,7 +172,7 @@ class Puzzle:
 
     def smallestST(self,start_word):
 
-        for i in range(50):
+        for i in range(100):
             st = self.dfs_spanning_tree(start_word,i)
             if not st == False:
                 return (st,i)
@@ -196,5 +218,78 @@ def print_grid(grid):
 
 p = Puzzle()
 findPairs(p,words)
-x = p.smallestST("charm")
-print_grid(plot(x[0],x[1]))
+x = p.smallestST(words[0])
+
+
+def generateClues():
+    f = open("cohere_train.txt", "r")
+    trainingData = f.read()
+    f.close()
+
+    clues = {}
+    for word in words:
+        message = trainingData + word + "\nDefinition:" 
+        response = co.generate(message,model = "command",temperature=0.75,max_tokens=20)
+        answer = (response.generations[0].text).split(".")[0]
+        answer = (response.generations[0].text).split("\n")[0]
+        if ":" in answer:
+            answer = (response.generations[0].text).split(":")[1]
+        clues[word] = answer
+
+    return clues
+
+def generateLatexGraphSolved(grid):
+    latex = "\\begin{Puzzle}{" + str(len(grid)) + "}{" + str(len(grid)) + "}\n"
+    for i in grid:
+        for j in i:
+            for z in range(10):
+                j = j.replace(str(z),"")
+            j = j.replace("-","")
+            j = j.replace("[]","")
+
+            latex += "|"
+            
+            if j == " ":
+                latex += "*"
+            else:
+                latex += "[][S]" + j
+        latex += "|.\n"
+    latex += "\\end{Puzzle}"
+    return latex
+
+def generateLatexGraph(grid):
+    latex = "\\begin{Puzzle}{" + str(len(grid)) + "}{" + str(len(grid)) + "}\n"
+    for i in grid:
+        for j in i:
+            latex += "|"
+            
+            if j == " ":
+                latex += "*"
+            else:
+                j = j.replace("][","-")
+                latex += j
+        latex += "|.\n"
+    latex += "\\end{Puzzle}"
+    return latex
+
+
+def generateLatexClues(sortedWords):
+    clues = generateClues()
+    
+    latex = "\\begin{PuzzleClues}{\\textbf{Clues:}\\\}\n\\noindent"
+    for i in range(len(sortedWords)):
+        latex += "\\Clue{" + str(i+1) + "}{" + sortedWords[i] + "}{" + clues[sortedWords[i]] + "} \\\ \n"
+    latex += "\\end{PuzzleClues}"
+    return latex
+
+latexStr = "\\documentclass{article}\n\\usepackage[unboxed]{cwpuzzle}\n\\begin{document}" + generateLatexGraph(plot(x[0],x[1])[0]) + "\n" + generateLatexClues(plot(x[0],x[1])[1])  + "\n\\newpage\n" + generateLatexGraphSolved(plot(x[0],x[1])[0]) + "\n\\end{document}"
+
+f = open("latex/main.tex", "w")
+f.write(latexStr)
+f.close()
+
+try:
+    subprocess.run(['pdflatex', "latex/main.tex"],check=True)
+    print("Compilation successful!")
+except subprocess.CalledProcessError as e:
+    print(f"Error during compilation: {e}")
