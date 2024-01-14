@@ -93,6 +93,17 @@ def testAdd(tree,new,d):
         return False
     return True
 
+def isSpanTree(tree):
+    for i in words:
+        found = False
+        for j in tree:
+            if j[0] == i or j[1] == i:
+                found == True
+                break
+        if found == False:
+            return False
+    return True
+
 class Puzzle:
     def __init__(self):
         self.words = set()
@@ -110,19 +121,29 @@ class Puzzle:
         # Add the edge to the list of edges
         self.edges.append((u, v, connection))
 
-    def dfs_spanning_tree(self, start_word):
+    def smallestST(self,start_word):
+
+        for i in range(50):
+            st = self.dfs_spanning_tree(start_word,i)
+            if not st == False:
+                return st
+
+    def dfs_spanning_tree(self, start_word,dim):
         visited = set()
         spanningTreeEdges = []
 
         def dfs(word):
             visited.add(word)
             for neighbor, connection in self.adjacencyList[word]:
-                if neighbor not in visited and testAdd(spanningTreeEdges,(word, neighbor, connection),10):
+                if neighbor not in visited and testAdd(spanningTreeEdges,(word, neighbor, connection),dim):
                     spanningTreeEdges.append((word, neighbor, connection))
                     dfs(neighbor)
 
         dfs(start_word)
-        return spanningTreeEdges
+
+        if isSpanTree(spanningTreeEdges):
+            return spanningTreeEdges
+        return False
 
 # For each word find all letters in other words
 # that match up with current word
@@ -148,7 +169,7 @@ def print_grid(grid):
 
 p = Puzzle()
 findPairs(p,words)
-print_grid(plot(p.dfs_spanning_tree("charm"),6))
+print_grid(plot(p.smallestST("charm"),6))
 
 
 tree = (("charm","adorn",(2,0)),("charm","metal",(4,0)),("adorn","worth",(2,1)),("adorn","angle",(4,1)))
