@@ -234,6 +234,9 @@ def generateClues():
         answer = (response.generations[0].text).split("\n")[0]
         if ":" in answer:
             answer = (response.generations[0].text).split(":")[1]
+        if word in answer.lower():
+            answer = answer.lower()
+            answer = answer.replace(word,"")
         clues[word] = answer
 
     return clues
